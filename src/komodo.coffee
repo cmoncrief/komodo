@@ -15,18 +15,18 @@ class Komodo
   auth: (key, app) ->
     @key = key
     @app = app
-    
+
   scale: (opts, cb) ->
     @heroku routes.scale, {type: opts.type, qty: opts.qty}, (err, data) ->
-      cb err, data
+      cb err, data if cb
 
   stop: (opts, cb) ->
     @heroku routes.stop, {ps: opts.ps, type: opts.type}, (err, data) ->
-      cb err, data
+      cb err, data if cb
 
   restart: (opts, cb) ->
     @heroku routes.restart, {ps: opts.ps, type: opts.type}, (err, data) ->
-      cb err, data
+      cb err, data if cb
 
   list: (cb) ->
     @heroku routes.list, {}, (err, data) ->

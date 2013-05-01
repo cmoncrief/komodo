@@ -30,11 +30,14 @@ describe 'Processes', ->
       assert.equal data, 'ok'
       done()
 
-  it 'should resrtart a process', (done) ->
+  it 'should restart a process', (done) ->
     komodo.restart {type: 'web'}, (err, data) ->
       assert.ifError err
       assert.equal data, 'ok'
       done()
+
+  it 'should allow optional callbacks', ->
+    komodo.scale {type: 'web', qty: '1'}
 
   after ->
     komodo.scale {type: 'web', qty: 1}
