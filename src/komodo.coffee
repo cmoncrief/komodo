@@ -3,10 +3,9 @@ request = require 'request'
 baseAPI = "https://api.heroku.com/apps"
 
 routes = 
-  scale   : {url: "/ps/scale", method: 'POST'}
-  stop    : {url: "/ps/stop", method: 'POST'}
-  restart : {url: "/ps/restart", method: 'POST'}
-  list    : {url: "/ps", method: 'GET'}
+  scale   : {url: "/formation", method: 'PATCH'}
+  stop    : {url: "/formation", method: 'PATCH'}
+  list    : {url: "/formation", method: 'GET'}
 
 class Komodo
 
@@ -17,29 +16,31 @@ class Komodo
     @app = app
 
   scale: (opts, cb) ->
-    @heroku routes.scale, {type: opts.type, qty: opts.qty}, (err, data) ->
+    herokuOpts = resource: opts.type, data: {quantity: opts.quantity, size: opts.size or 1}
+    @heroku routes.scale, herokuOpts, (err, data) ->
       cb err, data if cb
 
   stop: (opts, cb) ->
-    @heroku routes.stop, {ps: opts.ps, type: opts.type}, (err, data) ->
-      cb err, data if cb
-
-  restart: (opts, cb) ->
-    @heroku routes.restart, {ps: opts.ps, type: opts.type}, (err, data) ->
+    herokuOpts = resource: opts.type, data: {quantity: 0, size: opts.size or 1}
+    @heroku routes.scale, herokuOpts, (err, data) ->
       cb err, data if cb
 
   list: (cb) ->
     @heroku routes.list, {}, (err, data) ->
       cb err, data
 
-  heroku: (route, data, cb) =>
-    options = 
-      url: "#{baseAPI}/#{@app}#{route.url}"
+  heroku: (route, opts, cb) =>
+    reqOpts = 
       method: route.method
-      json: data
+      json: opts.data
       auth: {username: "#{@key}", password: "#{@key}"}
+      headers:
+        accept : "application/vnd.heroku+json; version=3"
 
-    request options, (err, req, body) ->
+    reqOpts.url = "#{baseAPI}/#{@app}#{route.url}"
+    reqOpts.url += "/#{opts.resource}" if opts.resource?
+
+    request reqOpts, (err, req, body) ->
       cb err, body 
 
 module.exports = (key, app) ->

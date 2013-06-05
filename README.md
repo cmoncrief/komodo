@@ -1,6 +1,6 @@
 # Komodo
 
-Komodo is a dead simple tool for managing Heroku processes in Node.js.
+Komodo is a dead simple tool for managing Heroku processes in Node.js. This module has been updated to use the [Heroku Platform API](https://devcenter.heroku.com/articles/platform-api-reference) as of the 0.2 release.
 
 ## Installation
 
@@ -13,7 +13,7 @@ Install via npm:
     var komodo = require('komodo')('YOUR_API_KEY', 'YOUR_APP_NAME')
 
     // Scale the web process to 5 dynos
-    komodo.scale({type: 'web', qty: 5}), function (err, data) {
+    komodo.scale({type: 'web', quantity: 5}), function (err, data) {
       return console.log(data);
     });
 
@@ -22,8 +22,8 @@ Install via npm:
       return console.log(data);
     });
 
-    // Restart a process type
-    komodo.restart({type: 'web'}), function (err, data) {
+    // Stop a process type
+    komodo.stop({type: 'web'}), function (err, data) {
       return console.log(data);
     });
 
@@ -35,17 +35,9 @@ Scales a process to the specified number of dynos.
 
 ##### Options: 
 
-* `type`: The type of process to scale.
-* `qty`: The number of dynos to scale to.
-
-#### komodo.restart(options, callback)
-
-Restarts a process type. One of the options below must be specified:
-
-##### Options: 
-
-* `ps`: The name of a process to restart. (optional)
-* `qty`: The type of process to restart. (optional)
+* `type`: The name of the process to scale.
+* `quantity`: The number of dynos to scale to.
+* `size`: The dyno size to use. Defaults to 1.
 
 #### komodo.stop(options, callback)
 
@@ -53,8 +45,7 @@ Stop process type. One of the options below must be specified:
 
 ##### Options: 
 
-* `ps`: The name of a process to stop. (optional)
-* `qty`: The type of process to stop. (optional)
+* `type`: The name of the process to stop.
 
 #### komodo.list(callback)
 
