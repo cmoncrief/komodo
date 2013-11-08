@@ -20,12 +20,14 @@
   "author": "Charles Moncrief <cmoncrief@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "request": "~2.21.0"
+    "request": "~2.27.0"
   },
   "devDependencies": {
-    "mocha": "~1.9.0",
+    "mocha": "~1.14.0",
     "coffeebar": "~0.3.0",
     "coffee-script": "~1.6.2"
   },
-  "engines": { "node" : "*"}
+  "engines": {
+    "node": "*"
+  }
 }
